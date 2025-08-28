@@ -6,7 +6,7 @@ import GetStarted from './pages/GetStarted'
 import Navbar from './components/Navbar'
 import { Routes,Route }  from 'react-router-dom'
 import Signup from './pages/Signup'
-
+import Login from './pages/Login'
 function App() {
   
   return (
@@ -15,7 +15,8 @@ function App() {
       <Routes>
         <Route path='/' element={<GetStarted/>}/>
         <Route path='/Signup' element={<Signup/>}/>
-      </Routes>
+        <Route path='/Login' element={<Login/>}/>
+      </Routes> 
        
     </>
   )
