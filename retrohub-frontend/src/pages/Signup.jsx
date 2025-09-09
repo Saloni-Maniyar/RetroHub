@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { handleSignup } from "../services/handleSignup";
+import { handleSignup } from "../services/Validations/handleSignup";
 import "../styles/Signup.css";
-import handleConfirmPasswordError from "../services/handleConfirmPasswordError";
+import handleConfirmPasswordError from "../services/Validations/handleConfirmPasswordError";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -18,10 +18,16 @@ export default function Signup() {
     e.preventDefault();
     
 const  { nameErr,emailErr,passwordErr,confirmPasswordErr}= await handleSignup({ name, email, password,confirmPassword});
-   setNameError(nameErr);
-   setEmailError(emailErr);
-   setPasswordError(passwordErr);
-   setConfirmPasswordError(confirmPasswordErr);
+   if(nameErr || emailErr || passwordErr || confirmPasswordErr){
+      setNameError(nameErr);
+      setEmailError(emailErr);
+      setPasswordError(passwordErr);
+      setConfirmPasswordError(confirmPasswordErr);
+   }else{
+        callSignupApi({name,email,password});
+   }
+
+   
   };
   
  

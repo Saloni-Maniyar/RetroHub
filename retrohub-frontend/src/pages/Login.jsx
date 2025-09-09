@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { handleLogin } from "../services/handleLogin";
+import { handleLogin } from "../services/Validations/handleLogin";
 import "../styles/Login.css";
 export default function Login() {
     const [email, setEmail] = useState('');
