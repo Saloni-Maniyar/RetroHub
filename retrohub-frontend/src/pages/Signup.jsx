@@ -24,7 +24,7 @@ const  { nameErr,emailErr,passwordErr,confirmPasswordErr}= await handleSignup({ 
       setPasswordError(passwordErr);
       setConfirmPasswordError(confirmPasswordErr);
    }else{
-        callSignupApi({name,email,password});
+        SignupApi({name,email,password});
    }
 
    
