@@ -2,6 +2,7 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color:inherit; /* same as Signup */
@@ -64,4 +65,19 @@
 
 .forgot-link{
   font-size: 0.75rem;
+}
+.loginError{
+     color:red;
+     font-size: 1.5rem;
+     font-weight: 700;
+     margin-top: 0.25rem;
+     margin-bottom:0.25rem
+}
+
+.loginSuccessMessage{
+      color:Green;
+     font-size: 1.5rem;
+     font-weight: 700;
+     margin-top: 0.25rem;
+     margin-bottom:0.25rem
 }

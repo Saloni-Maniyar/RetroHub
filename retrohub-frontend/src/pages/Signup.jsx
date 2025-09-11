@@ -2,6 +2,8 @@ import { useState } from "react";
 import { handleSignup } from "../services/Validations/handleSignup";
 import "../styles/Signup.css";
 import handleConfirmPasswordError from "../services/Validations/handleConfirmPasswordError";
+import {SignupApi} from "../services/ApiHandlers/SignupApi"
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -12,19 +14,40 @@ export default function Signup() {
   const [passwordError, setPasswordError] = useState('');
   const [nameError,setNameError]=useState('');
   const [emailError,setEmailError]=useState('');
-  
+  const [signupSuccessMessage,setSignupSuccessMessage]=useState("");
+  const [signupError,setSignupError]=useState("");
+  const navigate=useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
     
-const  { nameErr,emailErr,passwordErr,confirmPasswordErr}= await handleSignup({ name, email, password,confirmPassword});
-   if(nameErr || emailErr || passwordErr || confirmPasswordErr){
+      const  { nameErr,emailErr,passwordErr,confirmPasswordErr}= await handleSignup({ name, email, password,confirmPassword});
       setNameError(nameErr);
       setEmailError(emailErr);
       setPasswordError(passwordErr);
       setConfirmPasswordError(confirmPasswordErr);
-   }else{
-        SignupApi({name,email,password});
+   if(!nameErr && !emailErr && !passwordErr && !confirmPasswordErr){
+        try{
+
+           const data=await SignupApi({name,email,password});
+           console.log('done signup api call in try');
+           console.log(data);
+           
+           setSignupError("");
+
+           setSignupSuccessMessage("Signup Successful");
+           console.log(signupError);
+           console.log(signupSuccessMessage);
+           
+           setName(''); setEmail(''); setPassword(''); setConfirmPassword('');
+           navigate('/Login');
+              
+        }catch(err){
+          console.log(err);
+          console.log("In catch of signup component")
+          setSignupError(err.response?.data?.message || "Signup failed");
+          setSignupSuccessMessage('');
+        }
    }
 
    
@@ -33,6 +56,17 @@ const  { nameErr,emailErr,passwordErr,confirmPasswordErr}= await handleSignup({ 
  
   return (
     <div className="Signup">
+      <div className="SignupMessage">
+        {console.log("success message",{signupSuccessMessage})}
+        {console.log("signuperror",{signupError})}
+
+        
+        {signupSuccessMessage && <p className="signupSuccessMessage">{signupSuccessMessage}</p>}
+        {signupError && <p className="signuperror">{signupError}</p>}
+
+        
+      </div>
+     
       <div className="signup-card">
         
         <h2>Create Your Account</h2>
