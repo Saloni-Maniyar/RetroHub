@@ -18,3 +18,5 @@ const authMiddleware=(req,res,next)=>{
         next(); // go to the next handler
   });
 }
+
+module.exports=authMiddleware;

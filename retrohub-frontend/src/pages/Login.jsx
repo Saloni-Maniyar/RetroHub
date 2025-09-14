@@ -2,6 +2,10 @@ import { useState } from "react";
 import { handleLogin } from "../services/Validations/handleLogin";
 import "../styles/Login.css";
 import {loginApi} from "../services/ApiHandlers/loginApi"
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { use } from "react";
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -9,8 +13,8 @@ export default function Login() {
     const [passwordError,setPasswordError]=useState('');
     const [loginError,setLoginError]=useState('');
     const [loginSuccessMessage,setLoginSuccessMessage]=useState('');
-    
-
+    const {setIsLoggedIn}=useContext(AuthContext);
+    const  navigate=useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         const {emailErr,passwordErr}=await handleLogin({ email, password });
@@ -24,8 +28,9 @@ export default function Login() {
             console.log("data in try:",data);
             setLoginError('');
             setLoginSuccessMessage('Login Successful');
+            setIsLoggedIn(true);
             setEmail(''); setPassword('');
-
+            navigate('/');
 
            }catch(err){
             console.log(err);
