@@ -25,6 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 const authRoutes=require('./routes/authRoutes');
 app.use('/api/auth',authRoutes);
 
+const teamRoutes=require('./routes/teamRoutes');
+app.use('/api/team',teamRoutes);
+
 connectDB();//call to mongoose.connecet in config/db.js
   
 // Basic route for testing

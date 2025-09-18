@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { handleLogin } from "../services/Validations/handleLogin";
 import "../styles/Login.css";
 import {loginApi} from "../services/ApiHandlers/loginApi"
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+
 import { AuthContext } from "../context/AuthContext";
-import { use } from "react";
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
