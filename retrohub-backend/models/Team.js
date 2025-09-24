@@ -4,7 +4,7 @@ const teamSchema=new mongoose.Schema({
     team_name:{
         type:String,
         required:true,
-        maxlength:10,
+        maxlength:20,
         trim:true
     },
 
@@ -19,9 +19,9 @@ const teamSchema=new mongoose.Schema({
         type:String,
 
     },
-    created_by:{
-        user:{type:mongoose.Schema.Types.ObjectId,ref:'User'}
-    },
+    created_by:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
+        
+    
     created_at:{
         type:Date,
         default:Date.now(),

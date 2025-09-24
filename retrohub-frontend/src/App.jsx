@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import GetStarted from './pages/GetStarted'
 import Navbar from './components/Navbar'
@@ -9,6 +6,10 @@ import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Team from './pages/Team'
 import MyTeam from './pages/MyTeams'
+import Retroboard from './pages/Retroboard'
+import Discussion from './pages/Discussion'
+import AboutUs from './pages/AboutUs'
+import ContactUs from './pages/ContactUs'
 function App() {
   
   return (
@@ -20,6 +21,10 @@ function App() {
         <Route path='/Login' element={<Login/>}/>
         <Route path='/create-team' element={<Team/>}/>
         <Route path='/teams' element={<MyTeam/>}/>
+        <Route path="/teams/:teamId/retroboard" element={<Retroboard />} />
+        <Route path="/teams/:teamId/discussion/:discussionId" element={<Discussion />} />
+        <Route path="/about" element={<AboutUs/>}/>
+        <Route path="/contact-us" element={<ContactUs/>}/>
       </Routes> 
        
     </>

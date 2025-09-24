@@ -1,8 +1,9 @@
 const express=require('express');
 const router=express.Router();
-const {createTeam}=require('../controllers/teamController');
+const {createTeam,deleteTeam,fetchTeams}=require('../controllers/teamController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/create-team',authMiddleware,createTeam);
-
+router.post('/',authMiddleware,createTeam);
+router.delete('/:teamid',authMiddleware,deleteTeam);
+router.get('/',authMiddleware,fetchTeams);
 module.exports=router;

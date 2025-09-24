@@ -2,7 +2,7 @@ import axios from 'axios'
 export  async function SignupApi({name,email,password}){
     console.log("In SignupApi function");
     try{
-        const res=await axios.post("http://localhost:5000/api/auth/signup",{
+        const res=await axios.post("http://localhost:5001/api/auth/signup",{
             name:name,
             email:email,
             password:password
