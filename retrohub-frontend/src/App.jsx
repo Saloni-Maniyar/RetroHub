@@ -10,6 +10,8 @@ import Retroboard from './pages/Retroboard'
 import Discussion from './pages/Discussion'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
+import VerifySuccess from './pages/VerifySuccess'
+import VerifyFailed from './pages/VerifyFailed'
 function App() {
   
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/teams/:teamId/discussion/:discussionId" element={<Discussion />} />
         <Route path="/about" element={<AboutUs/>}/>
         <Route path="/contact-us" element={<ContactUs/>}/>
+        <Route path='/verify-success' element={<VerifySuccess/>}/>
+        <Route path='/verify-failed' element={<VerifyFailed/>}/>
       </Routes> 
        
     </>

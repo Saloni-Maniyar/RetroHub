@@ -1,10 +1,12 @@
 // src/pages/MyTeams.jsx
 import { useEffect,useState } from "react";
 import TeamCard from "../components/TeamCard";
+
 import "../styles/MyTeams.css";
 import { fetchTeam } from "../services/ApiHandlers/fetchTeam";
 export default function MyTeams() {
   const [managedTeams,setManagedTeams]=useState([]);
+  
   useEffect(() => {
   const loadTeams=async ()=>{
     try{

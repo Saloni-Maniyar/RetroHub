@@ -5,6 +5,7 @@ import {loginApi} from "../services/ApiHandlers/loginApi"
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../context/AuthContext";
+import { resendVerificationApi } from "../services/ApiHandlers/resendVerificationApi";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -42,10 +43,31 @@ export default function Login() {
         }
     };
 
+    const handleResendVerification = async () => {
+         try {
+                await resendVerificationApi({ email });
+                alert("Verification email resent! Please check your inbox.");
+         } catch (err) {
+                  alert(err.response?.data?.message || "Failed to resend verification email.");
+         }
+};
+
     return (
         <div className="Login">
             <div className="LoginMessage">
-                {loginError && <p className="loginError">{loginError}</p>}
+                {loginError && <p className="loginError">{loginError}
+                    {
+                    loginError.includes("Please verify your email before logging in.") &&  <>
+                    <br />
+                    <button
+                         onClick={() => handleResendVerification()}
+                         className="resend-btn"
+                     >
+                        Resend Verification Email
+                     </button>
+                    </>
+                    }
+                    </p>}
                 {loginSuccessMessage && <p className="loginSuccessMessage">{loginSuccessMessage}</p>}
             </div>
             <form onSubmit={handleSubmit}>

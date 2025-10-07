@@ -81,3 +81,20 @@
      margin-top: 0.25rem;
      margin-bottom:0.25rem
 }
+.resend-btn {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resend-btn:hover {
+  background-color: #1d4ed8; /* blue-700 */
+  transform: translateY(-2px);
+}

@@ -1,7 +1,9 @@
 const User=require('../models/User');
 const bcrypt=require('bcryptjs');
 const generateToken=require('../utils/generateToken');
-
+const crypto = require('crypto');
+const transporter = require('../config/nodemailer');
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 //signup controller
 const registerUser=async(req,res)=>{
@@ -15,18 +17,51 @@ const registerUser=async(req,res)=>{
 
          // hash password
         const hashedPassword = await bcrypt.hash(password, 10);
-        //create user
-        const  user=await User.create({name,email,password:hashedPassword});
+        const verificationToken = crypto.randomBytes(32).toString("hex");
+        const tokenExpires = Date.now() + 30 * 60 * 1000; // expires in 30 minutes
 
-        res.status(201).json({
-            _id:user._id,
-            name:user.name,
-            email:user.email,
-        })
+        //create user
+        const  user=await User.create({
+          name,
+          email,
+          password:hashedPassword,
+          verificationToken,
+          tokenExpires,
+        });
+        await user.save();
+        await sendVerificationEmail(user, verificationToken);
+        return  res.status(201).json({
+           message: "Signup successful! Please check your email to verify your account.",
+    
+        });
     }catch(err){
-         res.status(500).json({ message: "Server error", error: err.message });
+         console.error(err);
+         return res.status(500).json({ message: "Server error", error: err.message });
     }
 };
+
+//email verification
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const user = await User.findOne({ verificationToken: token });
+
+    if (!user){
+      // Redirect to frontend failure page
+      return res.redirect('http://localhost:5173/verify-failed');
+    }
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+
+    // Redirect to frontend success page
+    return res.redirect('http://localhost:5173/verify-success');
+  } catch (err) {
+    console.log(err);
+    return res.redirect('http://localhost:5173/verify-failed');
+  }
+};
+
 
 const loginUser = async (req, res) => {
   try {
@@ -34,6 +69,8 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User Does not exist.Please signup" });
+    if (!user.isVerified)
+      return res.status(400).json({ message: "Please verify your email before logging in." });
 
     const isMatch = await bcrypt.compare(password,user.password)
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
@@ -50,5 +87,30 @@ const loginUser = async (req, res) => {
   }
 };
 
+//resend verification email
+const resendVerificationEmail=async(req,res)=>{
+  try{
+      const {email}=req.body;
+      const user=await User.findOne({email});
+      if(!user){
+         return res.status(400).json({ message: "User not found. Please sign up." });
+      }
+      if (user.isVerified) {
+        return res.status(400).json({ message: "Account already verified. Please log in." });
+      }
+      const newToken = crypto.randomBytes(32).toString("hex");
+      const newExpiry = Date.now() + 30 * 60 * 1000; // 30 mins
+      user.verificationToken = newToken;
+      user.tokenExpires = newExpiry;
+      await user.save();
+      await sendVerificationEmail(user, newToken);
+      return res.status(200).json({ message: "Verification email resent successfully!" });
 
-module.exports={registerUser,loginUser};
+
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({ message: "Failed to resend email", error: err.message });
+  }
+}
+
+module.exports={registerUser,loginUser,verifyEmail,resendVerificationEmail};

@@ -1,12 +1,17 @@
 
 import "../styles/TeamCard.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {useState} from 'react';
 import PropTypes from "prop-types";
 import {UsersRound,UserRoundPlus,MoveUpRight} from "lucide-react";
-
+import AddMembersModal from "../pages/AddMembersModal";
 export default function TeamCard({ team }) {
+
+const [showModal,setShowModal]=useState(false);
+const teamId=team._id;
+const navigate=useNavigate();
   return (
-     <Link to={`/teams/${team.teamId}/retroboard`} className="team-card-link">
+    
       <div className="team-card">
         <h3 className="team-name">{team.team_name}</h3>
         <div className="team-type">
@@ -18,12 +23,19 @@ export default function TeamCard({ team }) {
            <span><UsersRound className="icon"/></span>  <span className="team-member-text"> {team.members_count} Members</span>
         </div>
        <div className="buttons">
-            <button><span>Boards</span> <MoveUpRight className="icon" /> </button>
-            <button><span>Add members</span> <UserRoundPlus className="icon" /></button>
+            <button  onClick={() => navigate(`/teams/${teamId}/retroboard`)}><span>Boards</span> <MoveUpRight className="icon" /> </button>
+            <button onClick={()=>setShowModal(true)}><span>Add members</span> <UserRoundPlus className="icon" /></button>
        </div>
-
+         {showModal && (
+          <>
+             <div className="modal-overlay" onClick={() => setShowModal(false)}></div>
+             <AddMembersModal teamId={teamId} onClose={() => setShowModal(false)} />
+          </>
+       
+        )}
       </div>
-    </Link>
+      
+    
   );
 }
 TeamCard.propTypes = {
@@ -34,4 +46,4 @@ TeamCard.propTypes = {
     team_type: PropTypes.string,
     members_count: PropTypes.number
   }).isRequired
-};
+}; 

@@ -5,16 +5,30 @@ import PropTypes from "prop-types";
 
 
 export  function AuthProvider({children}){
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
+            if (decoded.exp * 1000 < Date.now()) {
+            // Token expired
+            sessionStorage.removeItem('token');
+            setIsLoggedIn(false);
+        } else {
+          setIsLoggedIn(true);
+      }
+     }
+    }, []);
     const [isLoggedIn,setIsLoggedIn]=useState(false);
     const navigate=useNavigate();
     useEffect(()=>{
-        const token=localStorage.getItem('token');
+        const token=sessionStorage.getItem('token');
         setIsLoggedIn(!!token);
     },[]);
 
     //Logout
     const logout=()=>{
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem("user");
         setIsLoggedIn(false);
         navigate('/');
         
