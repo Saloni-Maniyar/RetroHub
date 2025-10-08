@@ -16,6 +16,7 @@ export default function Signup() {
   const [emailError,setEmailError]=useState('');
   const [signupSuccessMessage,setSignupSuccessMessage]=useState("");
   const [signupError,setSignupError]=useState("");
+  const [formDisabled, setFormDisabled] = useState(false);
   const navigate=useNavigate();
 
   const handleSubmit = async (e) => {
@@ -35,12 +36,13 @@ export default function Signup() {
            
            setSignupError("");
 
-           setSignupSuccessMessage("Signup Successful");
+           setSignupSuccessMessage("Signup Successful! Verification email sent. Check your inbox.");
+           setFormDisabled(true);
            console.log(signupError);
            console.log(signupSuccessMessage);
            
            setName(''); setEmail(''); setPassword(''); setConfirmPassword('');
-           navigate('/Login');
+        
               
         }catch(err){
           console.log(err);
@@ -61,7 +63,15 @@ export default function Signup() {
         {console.log("signuperror",{signupError})}
 
         
-        {signupSuccessMessage && <p className="signupSuccessMessage">{signupSuccessMessage}</p>}
+        {signupSuccessMessage && (<div>
+          <p className="signupSuccessMessage">{signupSuccessMessage}</p>
+          <button 
+              onClick={() => navigate('/Login')}
+              className="go-to-login-btn"
+            >
+              Go to Login
+            </button>
+        </div>)}
         {signupError && <p className="signuperror">{signupError}</p>}
 
         
@@ -77,6 +87,7 @@ export default function Signup() {
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={formDisabled}
             required
           />
            {nameError && <p className="error">{nameError}</p>}
@@ -85,6 +96,7 @@ export default function Signup() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={formDisabled}
             required
           />
            {emailError && <p className="error">{emailError}</p>}
@@ -93,6 +105,7 @@ export default function Signup() {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={formDisabled}
             required
           />
            {passwordError && <p className="error">{passwordError}</p>}
@@ -114,12 +127,13 @@ export default function Signup() {
               }
               
           }}
+          disabled={formDisabled}
           required
           />
 
         {confirmPasswordError && <p className="error">{confirmPasswordError}</p>}
 
-          <button type="submit">Sign Up</button>
+          <button type="submit" disabled={formDisabled}>Sign Up</button>
            <p className="login-link">
           Already have an account? <a href="/Login">Login</a>
         </p>
