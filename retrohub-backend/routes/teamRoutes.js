@@ -8,4 +8,9 @@ router.post('/',authMiddleware,createTeam);
 router.delete('/:teamid',authMiddleware,deleteTeam);
 router.get('/',authMiddleware,fetchTeams);
 router.post('/:teamid/invite',authMiddleware,sendInvites)
+
+
+
+
+
 module.exports=router;

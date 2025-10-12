@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import { handleSignup } from "../services/Validations/handleSignup";
 import "../styles/Signup.css";
 import handleConfirmPasswordError from "../services/Validations/handleConfirmPasswordError";
 import {SignupApi} from "../services/ApiHandlers/SignupApi"
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useSearchParams } from "react-router-dom";
+
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -17,7 +18,15 @@ export default function Signup() {
   const [signupSuccessMessage,setSignupSuccessMessage]=useState("");
   const [signupError,setSignupError]=useState("");
   const [formDisabled, setFormDisabled] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const teamId = searchParams.get("teamId");
+  const inviteEmail = searchParams.get("email");
   const navigate=useNavigate();
+
+  useEffect(() => {
+      if (inviteEmail) setEmail(inviteEmail);
+  }, [inviteEmail]);
 
   const handleSubmit = async (e) => {
       e.preventDefault();
@@ -30,13 +39,20 @@ export default function Signup() {
    if(!nameErr && !emailErr && !passwordErr && !confirmPasswordErr){
         try{
 
-           const data=await SignupApi({name,email,password});
+           const data=await SignupApi({name,email,password,teamId});
            console.log('done signup api call in try');
            console.log(data);
            
            setSignupError("");
+           if(data.joinedTeam){
+                  setSignupSuccessMessage("Signup successful! You are now a member of the team. Please login to continue.");
+                  setTimeout(() => {
+                          navigate(`/login?email=${encodeURIComponent(email)}&msg=${encodeURIComponent("Signup successful! Login to see your team.")}`);
+                  }, 2000);
+           }else{
+                  setSignupSuccessMessage("Signup Successful! Verification email sent. Check your inbox.");
 
-           setSignupSuccessMessage("Signup Successful! Verification email sent. Check your inbox.");
+           }
            setFormDisabled(true);
            console.log(signupError);
            console.log(signupSuccessMessage);

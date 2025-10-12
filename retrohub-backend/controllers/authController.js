@@ -4,11 +4,12 @@ const generateToken=require('../utils/generateToken');
 const crypto = require('crypto');
 const transporter = require('../config/nodemailer');
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+const TeamMemberShip=require("../models/TeamMembership");
 
 //signup controller
 const registerUser=async(req,res)=>{
     try{
-        const {name,email,password}=req.body;
+        const {name,email,password,teamId}=req.body;
         //check user exists 
         const userExist=await User.findOne({email});
         if(userExist){
@@ -28,9 +29,36 @@ const registerUser=async(req,res)=>{
           verificationToken,
           tokenExpires,
         });
+        //if coming from invitelink we will skip verification and auto verify here
+        if (teamId) {
+              user.isVerified = true;
+              await user.save();
+              // create membership 
+              const alreadyMember = await TeamMembership.findOne({
+                  user: user._id,
+                  team: teamId,
+               });
+
+               if (!alreadyMember) {
+               await TeamMemberShip.create({
+               user: user._id,
+               team: teamId,
+               role: "member",
+              });
+              }
+              
+              return res.status(201).json({
+                   success: true,
+                   joinedTeam: true,
+                   message: "Signup successful! You are now part of the team.",
+              });
+        }
+
+
         await user.save();
         await sendVerificationEmail(user, verificationToken);
         return  res.status(201).json({
+           joinedTeam: false,
            message: "Signup successful! Please check your email to verify your account.",
     
         });

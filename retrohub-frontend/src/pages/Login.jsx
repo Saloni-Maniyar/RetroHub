@@ -1,8 +1,8 @@
-import { useState,useContext } from "react";
+import { useState,useContext,useEffect} from "react";
 import { handleLogin } from "../services/Validations/handleLogin";
 import "../styles/Login.css";
 import {loginApi} from "../services/ApiHandlers/loginApi"
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation} from "react-router-dom";
 
 import { AuthContext } from "../context/AuthContext";
 import { resendVerificationApi } from "../services/ApiHandlers/resendVerificationApi";
@@ -14,8 +14,21 @@ export default function Login() {
     const [passwordError,setPasswordError]=useState('');
     const [loginError,setLoginError]=useState('');
     const [loginSuccessMessage,setLoginSuccessMessage]=useState('');
+    const [infoMessage, setInfoMessage] = useState("");
     const {setIsLoggedIn}=useContext(AuthContext);
     const  navigate=useNavigate();
+    const location=useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const prefillEmail = queryParams.get("email");
+    const loginInfoMsg = queryParams.get("msg");
+    useEffect(() => {
+    if (loginInfoMsg) {
+      setInfoMessage(decodeURIComponent(loginInfoMsg));
+    }
+  }, [loginInfoMsg]);
+    useEffect(() => {
+        if (prefillEmail) setEmail(prefillEmail);
+    }, [prefillEmail]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         const {emailErr,passwordErr}=await handleLogin({ email, password });
@@ -55,6 +68,7 @@ export default function Login() {
     return (
         <div className="Login">
             <div className="LoginMessage">
+                {infoMessage && <p className="infoMessage">{infoMessage}</p>}
                 {loginError && <p className="loginError">{loginError}
                     {
                     loginError.includes("Please verify your email before logging in.") &&  <>

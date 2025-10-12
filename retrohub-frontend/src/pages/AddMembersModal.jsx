@@ -17,7 +17,7 @@ export default function AddMembersModal({teamId,onClose}){
                 const emailList = emails.split(",").map(e => e.trim()).filter(Boolean);
                 const res=await sendInvites({teamId,emails:emailList});
                 console.log(res);
-                setAddMemberSuccessMessage("Members Added Successfully");
+                setAddMemberSuccessMessage("Invite Sent Successfully");
 
                 setEmailError('');
                 setEmails('');
@@ -37,7 +37,7 @@ export default function AddMembersModal({teamId,onClose}){
                 <h2>Add Members</h2>
                 {emailError && <p>{emailError}</p>}
                 {addMembersError && <p>{addMembersError}</p>}
-                {addMemberSuccess && <p>{addMemberSuccessMessage}</p>}
+                {addMemberSuccessMessage && <p className="successMessage">{addMemberSuccessMessage}</p>}
                 
                 <form onSubmit={handleSubmit}>
                      <textarea placeholder="Enter emails, comma separated" rows={4}

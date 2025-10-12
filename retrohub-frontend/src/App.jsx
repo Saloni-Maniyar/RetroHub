@@ -12,6 +12,7 @@ import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
 import VerifySuccess from './pages/VerifySuccess'
 import VerifyFailed from './pages/VerifyFailed'
+import JoinTeam from './pages/JoinTeam'
 function App() {
   
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs/>}/>
         <Route path='/verify-success' element={<VerifySuccess/>}/>
         <Route path='/verify-failed' element={<VerifyFailed/>}/>
+        <Route path='/join-team/:teamId' element={<JoinTeam/>}/>
       </Routes> 
        
     </>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 export async function createTeamApi({teamName,description,selectedValue}){
     try{
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const res=await axios.post("http://localhost:5001/api/team",{
             team_name:teamName,
             description:description,

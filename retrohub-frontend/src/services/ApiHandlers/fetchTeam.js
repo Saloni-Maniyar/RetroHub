@@ -1,7 +1,7 @@
 import axios from 'axios'
 export async function fetchTeam(){
     try{
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         console.log(token);
         const res=await axios.get("http://localhost:5001/api/team",
         {

@@ -28,6 +28,8 @@ app.use('/api/auth',authRoutes);
 const teamRoutes=require('./routes/teamRoutes');
 app.use('/api/team',teamRoutes);
 
+const joinTeamRoutes=require('./routes/joinTeamRoutes');
+app.use('/api/join-team',joinTeamRoutes);
 connectDB();//call to mongoose.connecet in config/db.js
   
 // Basic route for testing
