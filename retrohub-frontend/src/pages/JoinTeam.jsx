@@ -21,16 +21,20 @@ export default function JoinTeam(){
                       sessionStorage.setItem("inviteTeamId", teamId);
                       sessionStorage.setItem("inviteEmail", email);
                      navigate(`/signup?email=${email}&teamId=${teamId}`);
-             }else if (res.needLogin) {
+             }else if (res.needLogin || (res.alreadyMember && !res.isLoggedIn)) {
               sessionStorage.setItem("inviteTeamId", teamId);
               sessionStorage.setItem("inviteEmail", email);
              navigate(`/login?email=${email}&teamId=${teamId}`);
             } else if (res.alreadyMember) {
                     setStatus("already");
                     setTimeout(() => navigate("/myteams"), 1500);
-            } else {
+            }else if (!res.success && res.message === "Team not found") {
+              setStatus("notFound");
+              setTimeout(()=> navigate("/"),1500);
+             
+        } else {
                     setStatus("error");
-             }
+            }
         };
         checkJoin();
     },[teamId, email, token, navigate]);
@@ -40,6 +44,7 @@ export default function JoinTeam(){
       {status === "joined" && <p> You’ve successfully joined the team!</p>}
       {status === "already" && <p> You’re already a member of this team.</p>}
       {status === "error" && <p> Something went wrong. Please try again.</p>}
+      {status === "notFound" && <p>Team Not Found!!!</p>}
     </div>
   );
 

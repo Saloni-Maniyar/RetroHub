@@ -30,7 +30,13 @@ const joinTeam=async(req,res)=>{
 
           const existingMembership = await TeamMemberShip.findOne({ user: user._id, team: teamId });
           if (existingMembership) {
-                 return res.json({ success: false, alreadyMember: true, message: "Already a team member." });
+                 const isLoggedIn = req.user && req.user.email === email;
+                 return res.json({ 
+                    success: false, 
+                    alreadyMember: true, 
+                    message: "Already a team member.",
+                    isLoggedIn,
+                 });
           }
           //loggedin user 
            if (req.user && req.user.email === email) {

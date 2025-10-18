@@ -34,7 +34,7 @@ const registerUser=async(req,res)=>{
               user.isVerified = true;
               await user.save();
               // create membership 
-              const alreadyMember = await TeamMembership.findOne({
+              const alreadyMember = await TeamMemberShip.findOne({
                   user: user._id,
                   team: teamId,
                });

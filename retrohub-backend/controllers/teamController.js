@@ -56,10 +56,29 @@ const deleteTeam=async(req,res)=>{
 const fetchTeams=async(req,res)=>{
     try{
         const userid=req.user.id;
-        const teams=await TeamMemberShip.find({user:userid}).populate('team');
-        console.log('teams',teams);
-        const managedTeams=teams.filter(team=>team.role=='manager');
-        const participatedTeams=teams.filter(team=>team.role=='member');
+        const memberships=await TeamMemberShip.find({user:userid}).populate('team');
+
+        console.log('memberships',memberships);
+        const managedTeams=[];
+        const participatedTeams=[];
+
+        for(const membership of memberships){
+            const team=membership.team;
+            if(!team) continue;
+            // count total members (including manager)
+            const memberCount = await TeamMemberShip.countDocuments({ team: team._id });
+
+            // attach members_count to team
+            const teamWithCount = {
+                 ...team.toObject(),
+                 members_count: memberCount,
+            };
+            if (membership.role === 'manager') {
+                 managedTeams.push(teamWithCount);
+            } else {
+                 participatedTeams.push(teamWithCount);
+            }
+        }
         console.log('managed Teams: ',managedTeams);
         console.log('Participated Teams: ',participatedTeams);
 
