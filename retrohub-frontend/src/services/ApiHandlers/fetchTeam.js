@@ -1,5 +1,6 @@
 import axios from 'axios'
 export async function fetchTeam(){
+    console.log("in fetch team:");
     try{
         const token = sessionStorage.getItem("token");
         console.log(token);

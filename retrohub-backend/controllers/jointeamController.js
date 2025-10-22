@@ -3,23 +3,26 @@ const router=express.Router();
 const User=require('../models/User');
 const Team=require('../models/Team');
 const TeamMemberShip=require('../models/TeamMembership');
-const authMiddleware=require('../middleware/authMiddleware');
+// const authMiddleware=require('../middleware/authMiddleware')
 
 //post join-team
 const joinTeam=async(req,res)=>{
-    console.log("in join team");
+    console.log("in join team controller ");
     const {teamId,email}=req.body;
     console.log("teamid=",teamId,"email=",email);
     if (!teamId || !email) {
+            console.log("team id and email does not exist");
              return res.status(400).json({ success: false, message: "Missing teamId or email" });
     }  
     try{
         const team = await Team.findById(teamId);
         console.log("team= ",team);
         if (!team) {
+            console.log('team not found');
              return res.status(404).json({ success: false, message: "Team not found" });
         }
         const user=await User.findOne({email});
+        console.log("user to be join: ",user);
          if (!user) {
              return res.json({
                     success: false,

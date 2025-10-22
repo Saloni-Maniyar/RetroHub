@@ -21,14 +21,16 @@ export default function Login() {
     const queryParams = new URLSearchParams(location.search);
     const prefillEmail = queryParams.get("email");
     const loginInfoMsg = queryParams.get("msg");
+    const inviteTeamId = queryParams.get("teamId"); 
     useEffect(() => {
     if (loginInfoMsg) {
       setInfoMessage(decodeURIComponent(loginInfoMsg));
     }
   }, [loginInfoMsg]);
-    useEffect(() => {
+
+  useEffect(() => {
         if (prefillEmail) setEmail(prefillEmail);
-    }, [prefillEmail]);
+   }, [prefillEmail]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         const {emailErr,passwordErr}=await handleLogin({ email, password });
@@ -41,10 +43,17 @@ export default function Login() {
             const data=await loginApi({email,password});
             console.log("data in try:",data);
             setLoginError('');
+            console.log("login successful");
             setLoginSuccessMessage('Login Successful');
             setIsLoggedIn(true);
             setEmail(''); setPassword('');
-            navigate('/');
+             if (inviteTeamId) {
+                setTimeout(() => {
+                navigate(`/join-team/${inviteTeamId}?email=${encodeURIComponent(email)}`);
+                 }, 1500); // show success message briefly
+             } else {
+                setTimeout(() => navigate("/"), 1500);
+             }
 
            }catch(err){
             console.log(err);

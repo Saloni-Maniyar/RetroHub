@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 const express=require('express');
-const mongoose=require('mongoose');
+const http = require('http');           
+const { Server } = require('socket.io'); 
 const cors=require('cors');
 const connectDB = require('./config/db');
 const app=express();
@@ -30,6 +31,9 @@ app.use('/api/team',teamRoutes);
 
 const joinTeamRoutes=require('./routes/joinTeamRoutes');
 app.use('/api/join-team',joinTeamRoutes);
+
+const feedbackRoutes=require('./routes/feedbackRoutes');
+app.use('/api/feedback/',feedbackRoutes);
 connectDB();//call to mongoose.connecet in config/db.js
   
 // Basic route for testing
@@ -37,6 +41,32 @@ connectDB();//call to mongoose.connecet in config/db.js
             res.send('Backend server is running!');
         });
 
-        app.listen(PORT, () => {
+const server = http.createServer(app); // wrap Express app
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:5173", // your frontend URL
+        methods: ["GET", "POST"]
+    }
+});
+
+// Listen for socket connections
+io.on("connection", (socket) => {
+    console.log("New client connected:", socket.id);
+
+    // Listen for feedback added from frontend
+    socket.on("feedbackAdded", (newFeedback) => {
+        console.log("Feedback received via socket:", newFeedback);
+        // Broadcast to all clients
+        io.emit("feedbackAdded", newFeedback);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected:", socket.id);
+    });
+});
+
+module.exports.io = io;
+
+ server.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
