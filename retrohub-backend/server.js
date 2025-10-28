@@ -34,6 +34,9 @@ app.use('/api/join-team',joinTeamRoutes);
 
 const feedbackRoutes=require('./routes/feedbackRoutes');
 app.use('/api/feedback/',feedbackRoutes);
+
+const discussionRoutes=require('./routes/discussionRoutes');
+app.use('/api/discussion',discussionRoutes);
 connectDB();//call to mongoose.connecet in config/db.js
   
 // Basic route for testing
@@ -59,6 +62,17 @@ io.on("connection", (socket) => {
         // Broadcast to all clients
         io.emit("feedbackAdded", newFeedback);
     });
+
+    socket.on("joinDiscussion", (discussionId) => {
+    socket.join(discussionId);
+    console.log(`Socket ${socket.id} joined discussion ${discussionId}`);
+    });
+
+     socket.on("newMessage", (msg) => {
+    console.log("New discussion message:", msg);
+    io.to(msg.feedbackId).emit("newMessage", msg); // emit to that feedback/discussion room
+  });
+
 
     socket.on("disconnect", () => {
         console.log("Client disconnected:", socket.id);

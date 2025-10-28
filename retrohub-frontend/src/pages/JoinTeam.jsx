@@ -31,7 +31,7 @@ export default function JoinTeam(){
              setTimeout(()=>navigate(`/login?email=${email}&teamId=${teamId}`),2000);
             } else if (res.alreadyMember) {
                     setStatus("already");
-                    setTimeout(() => navigate("/myteams"), 2000);
+                    setTimeout(() => navigate("/teams"), 2000);
             }else if (!res.success && res.message === "Team not found") {
               setStatus("notFound");
               setTimeout(()=> navigate("/"),1500);

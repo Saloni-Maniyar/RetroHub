@@ -40,14 +40,17 @@ export default function Login() {
       
            try{
             console.log("in login try");
-            const data=await loginApi({email,password});
-            console.log("data in try:",data);
+            const data=await loginApi({email,password, teamId:inviteTeamId});
+            console.log("data in try from loginApi:",data);
             setLoginError('');
             console.log("login successful");
             setLoginSuccessMessage('Login Successful');
             setIsLoggedIn(true);
             setEmail(''); setPassword('');
-             if (inviteTeamId) {
+             if (data.joinedTeam) { 
+                // User automatically joined the team
+                setTimeout(() => navigate("/teams"), 1500);
+            }else if (inviteTeamId) {
                 setTimeout(() => {
                 navigate(`/join-team/${inviteTeamId}?email=${encodeURIComponent(email)}`);
                  }, 1500); // show success message briefly

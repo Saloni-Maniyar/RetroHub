@@ -93,8 +93,8 @@ const verifyEmail = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
+    const { email, password,teamId } = req.body;
+    console.log("in login controller teamId is ",teamId);
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "User Does not exist.Please signup" });
     if (!user.isVerified)
@@ -105,13 +105,31 @@ const loginUser = async (req, res) => {
 
     const token = generateToken(user);
 
-    res.status(200).json({
+     let joinedTeam = false;
+
+    // auto join team if teamId is provided
+    if (teamId) {
+
+      const alreadyMember = await TeamMemberShip.findOne({ user: user._id, team: teamId });
+      if (!alreadyMember) {
+        await TeamMemberShip.create({
+          user: user._id,
+          team: teamId,
+          role: "member",
+        });
+        joinedTeam = true;
+      }
+    }
+    console.log("Joined team= ",joinedTeam);
+
+   return  res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user._id, name: user.name, email: user.email}
+      user: { id: user._id, name: user.name, email: user.email},
+      joinedTeam, 
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+   return  res.status(500).json({ error: error.message });
   }
 };
 

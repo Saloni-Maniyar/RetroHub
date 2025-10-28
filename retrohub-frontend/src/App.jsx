@@ -13,10 +13,12 @@ import ContactUs from './pages/ContactUs'
 import VerifySuccess from './pages/VerifySuccess'
 import VerifyFailed from './pages/VerifyFailed'
 import JoinTeam from './pages/JoinTeam'
+import { AuthProvider } from './context/AuthContext'
 function App() {
   
   return (
     <>
+      <AuthProvider>
       <Navbar/>
       <Routes>
         <Route path='/' element={<GetStarted/>}/>
@@ -32,6 +34,7 @@ function App() {
         <Route path='/verify-failed' element={<VerifyFailed/>}/>
         <Route path='/join-team/:teamId' element={<JoinTeam/>}/>
       </Routes> 
+      </AuthProvider>
        
     </>
   )
