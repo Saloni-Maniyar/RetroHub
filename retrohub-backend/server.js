@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5001;
 
 
 const corsOptions={
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173",, "http://4.186.27.179"],
     methods:"GET,POST,PUT,DELETE,PATCH,HEAD",
     credentials:true
 }
@@ -88,6 +88,10 @@ io.on("connection", (socket) => {
 
 module.exports.io = io;
 
- server.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
+//  server.listen(PORT, () => {
+//             console.log(`Server is running on port ${PORT}`);
+//         });
+
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
+});
