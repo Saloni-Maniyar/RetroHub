@@ -1,7 +1,8 @@
 const transporter = require("../config/nodemailer");
 
 const sendVerificationEmail = async (user, token) => {
-  const verificationLink = `http://localhost:5001/api/auth/verify/${token}`;
+  // const verificationLink = `http://localhost:5001/api/auth/verify/${token}`;
+  const verificationLink = `${process.env.SERVER_URL}/api/auth/verify/${token}`;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,

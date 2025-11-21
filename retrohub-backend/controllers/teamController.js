@@ -111,7 +111,9 @@ const sendInvites=async(req,res)=>{
         }
         for (let email of emails) {
             console.log("in for loop");
-             const inviteLink = `http://localhost:5173/join-team/${teamid}?email=${email}`;
+            //  const inviteLink = `http://localhost:5173/join-team/${teamid}?email=${email}`;
+            const inviteLink = `${process.env.CLIENT_URL}/join-team/${teamid}?email=${email}`;
+
              await transporter.sendMail({
              from: process.env.EMAIL_USER,
              to: email,

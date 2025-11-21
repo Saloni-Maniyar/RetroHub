@@ -1,6 +1,16 @@
 import axios from "axios";
+const API = import.meta.env.VITE_API_URL;
 
 export async function resendVerificationApi({ email }) {
-  const res = await axios.post("http://localhost:5001/api/auth/resend-verification", { email });
+  const res = await axios.post(`${API}/auth/resend-verification`, { email });
   return res.data;
 }
+
+
+
+// import axios from "axios";
+
+// export async function resendVerificationApi({ email }) {
+//   const res = await axios.post("http://localhost:5001/api/auth/resend-verification", { email });
+//   return res.data;
+// }
