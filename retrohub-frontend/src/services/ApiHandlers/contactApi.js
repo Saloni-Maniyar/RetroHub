@@ -1,17 +1,15 @@
 // contactApi.js
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL;   // <-- dynamic base URL
+
 export async function submitContactApi({ name, email, message }) {
   try {
-    const token = sessionStorage.getItem("token"); // optional, keep consistent
+    const token = sessionStorage.getItem("token");
 
     const res = await axios.post(
-      "http://localhost:5001/api/contact",
-      {
-        name,
-        email,
-        message,
-      },
+      `${API}/contact`,   // <-- No localhost anymore
+      { name, email, message },
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
@@ -22,7 +20,39 @@ export async function submitContactApi({ name, email, message }) {
     console.log("Contact form submitted:", res.data);
     return res.data;
   } catch (err) {
-    console.log("Contact form error:", err.response?.data?.message || err.message);
+    console.log(
+      "Contact form error:",
+      err.response?.data?.message || err.message
+    );
     throw err;
   }
 }
+
+// // contactApi.js
+// import axios from "axios";
+
+// export async function submitContactApi({ name, email, message }) {
+//   try {
+//     const token = sessionStorage.getItem("token"); // optional, keep consistent
+
+//     const res = await axios.post(
+//       "http://localhost:5001/api/contact",
+//       {
+//         name,
+//         email,
+//         message,
+//       },
+//       {
+//         headers: {
+//           Authorization: token ? `Bearer ${token}` : "",
+//         },
+//       }
+//     );
+
+//     console.log("Contact form submitted:", res.data);
+//     return res.data;
+//   } catch (err) {
+//     console.log("Contact form error:", err.response?.data?.message || err.message);
+//     throw err;
+//   }
+// }

@@ -1,8 +1,9 @@
 import axios from 'axios'
+const API = import.meta.env.VITE_API_URL;
 export  async function SignupApi({name,email,password,teamId}){
     console.log("In SignupApi function");
     try{
-        const res=await axios.post("http://localhost:5001/api/auth/signup",{
+        const res=await axios.post(`${API}/auth/signup`,{
             name:name,
             email:email,
             password:password,
