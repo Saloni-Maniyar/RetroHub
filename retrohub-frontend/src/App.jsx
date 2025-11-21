@@ -14,6 +14,10 @@ import VerifySuccess from './pages/VerifySuccess'
 import VerifyFailed from './pages/VerifyFailed'
 import JoinTeam from './pages/JoinTeam'
 import { AuthProvider } from './context/AuthContext'
+import Profile from './pages/Profile'
+import ChangePassword from './pages/ChangePassword'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 function App() {
   
   return (
@@ -33,6 +37,10 @@ function App() {
         <Route path='/verify-success' element={<VerifySuccess/>}/>
         <Route path='/verify-failed' element={<VerifyFailed/>}/>
         <Route path='/join-team/:teamId' element={<JoinTeam/>}/>
+        <Route path='/profile' element={<Profile/>}/>
+        <Route path='/change-password' element={<ChangePassword/>}/>
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
+        <Route path='reset-password/:token' element={<ResetPassword/>} />
       </Routes> 
       </AuthProvider>
        

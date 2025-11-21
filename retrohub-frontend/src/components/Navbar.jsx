@@ -21,7 +21,7 @@ export default function Navbar() {
             <li><a href='/create-team'>Create Team</a></li>
             <li><a href='/teams'>My Teams</a></li>
             <li><a href='/contact-us'>Contact us</a></li>
-            <li><a href='/profile'></a>Profile</li>
+            <li><a href='/profile'>Profile</a></li>
             <li><button onClick={logout}>Log out</button></li>
           </ul>
         </>

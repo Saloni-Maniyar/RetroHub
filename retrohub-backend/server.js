@@ -37,7 +37,14 @@ app.use('/api/feedback/',feedbackRoutes);
 
 const discussionRoutes=require('./routes/discussionRoutes');
 app.use('/api/discussion',discussionRoutes);
+
+const contactRoutes=require('./routes/contactRoutes');
+app.use('/api/contact',contactRoutes);
+
+const profileRoutes=require('./routes/profileRoutes');
+app.use('/api',profileRoutes);
 connectDB();//call to mongoose.connecet in config/db.js
+
   
 // Basic route for testing
         app.get('/', (req, res) => {
