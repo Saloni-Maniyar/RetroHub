@@ -1,3 +1,4 @@
+require('dotenv').config();
 const transporter = require("../config/nodemailer");
 
 const sendVerificationEmail = async (user, token) => {

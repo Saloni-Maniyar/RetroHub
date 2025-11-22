@@ -1,0 +1,47 @@
+name: Deploy RetroHub to Azure VM
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # ------- FRONTEND BUILD -------
+      - name: Build Frontend
+        working-directory: retrohub-frontend
+        run: |
+          npm install
+          npm run build
+
+      # ------- COPY FRONTEND DIST TO VM -------
+      - name: Upload Frontend to VM
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "retrohub-frontend/dist/*"
+          target: "~/RetroHub/RetroHub/retrohub-frontend/dist"
+
+      # ------- BACKEND DEPLOY + PM2 RESTART -------
+      - name: Restart Backend on VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/RetroHub/RetroHub/retrohub-backend
+            pm2 restart server --update-env
+            echo "Backend restarted successfully"
