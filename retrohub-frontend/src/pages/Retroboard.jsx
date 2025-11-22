@@ -122,7 +122,7 @@ export default function Retroboard() {
 
   return (
     <div className="retroboard">
-      <h2 className="retroboard-title">Retroboard for Team {teamId}</h2>
+      <h2 className="retroboard-title">Retroboard </h2>
       <div className="retroboard-columns">
         {/* Column 1: What is Good */}
         <div className="retro-column">
