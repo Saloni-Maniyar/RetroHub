@@ -29,7 +29,7 @@ jobs:
       - name: Upload frontend build to VM
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.VM_HOST }}
+          host: ${{ secrets.VM_HOST }}g
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "retrohub-frontend/dist/*"
