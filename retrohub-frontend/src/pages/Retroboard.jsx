@@ -20,7 +20,7 @@ export default function Retroboard() {
   console.log("token in retrohub:", token);
   console.log("user from authcontext:", user);
 
-  // ✅ Fetch feedbacks ONLY after token is ready
+  //  Fetch feedbacks ONLY after token is ready
   useEffect(() => {
     if (!token) return; // wait until AuthContext finishes loading
 
@@ -37,7 +37,7 @@ export default function Retroboard() {
     loadFeedbacks();
   }, [teamId, token]);
 
-  // ✅ Connect socket only after token exists
+  //  Connect socket only after token exists
   useEffect(() => {
     if (!token) return;
 
